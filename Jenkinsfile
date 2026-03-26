@@ -1,37 +1,31 @@
 pipeline {
     agent { label 'noeud-test' }
-
     tools {
         maven 'M3'
     }
-
     environment {
-        IMG="formationintegration-guillaume:${env.BUILD_ID}"
-        CT_NAME="formationintegration-guillaume-container"
+        IMG="mon-projet-java:${env.BUILD_NUMBER}"
+        CT_NAME="mon-projet-java-container"
     }
-
     stages {
         stage('Compilation') {
             steps {
                 sh 'mvn clean package'
             }
         }
-
-        stage ('Buil docker image') {
+        stage('Build docker image') {
             steps {
                 sh "docker build -t ${IMG} ."
             }
         }
-
-        stage ('Deploiement') {
+        stage('deploiement') {
             steps {
-                sh "docker stop ${CT_NAME) ||  true"
-                sh "docker rm ${CT_NAME) ||  true"
-                sh "docker run -d --name  ${CT_NAME} ${IMG}"
+                sh "docker stop ${CT_NAME} || true"
+                sh "docker rm ${CT_NAME} || true"
+                sh "docker run -d --name ${CT_NAME} ${IMG}"
             }
         }
     }
-
     post {
         success {
             echo "Ca a fonctionné"
@@ -39,4 +33,3 @@ pipeline {
         }
     }
 }
- 
