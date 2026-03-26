@@ -4,16 +4,30 @@ pipeline {
         maven 'M3'
     }
     environment {
-        IMG="mon-projet-java:${env.BUILD_NUMBER}"
-        CT_NAME="mon-projet-java-container"
+        IMG="mon-projet-java-guillaume:${env.BUILD_NUMBER}"
+        CT_NAME="mon-projet-java-guillaume-container"
         URL_NOTIFICATIONS="https://ntfy.sh/MfQYd8Ox5ueqDZuu"
+        SONAR_PRJ_KEY="projet-guillaume"
     }
     stages {
         stage('Compilation') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean verify'
             }
         }
+
+        stage('Analyse sonar') {
+            steps {
+                withSonarQubeEnv('SonarqubeSNCF') {
+                    sh """
+                    mvn sonar:sonar \
+                    -Dsonar.projectKey=${SONAR_PRJ_KEY} \
+                    -Dsonar.projectName=${SONAR_PRJ_KEY}
+                    """
+                }
+            }
+        }
+        
         stage('Build docker image') {
             steps {
                 sh "docker build -t ${IMG} ."
