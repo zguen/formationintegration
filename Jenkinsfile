@@ -18,7 +18,7 @@ pipeline {
 
         stage('Analyse sonar') {
             steps {
-                withSonarQubeEnv('SonarqubeSNCF') {
+                withSonarQubeEnv('Sonarqube SNCF') {
                     sh """
                     mvn sonar:sonar \
                     -Dsonar.projectKey=${SONAR_PRJ_KEY} \
