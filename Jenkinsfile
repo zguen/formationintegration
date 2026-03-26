@@ -6,8 +6,8 @@ pipeline {
     }
 
     environment {
-        IMG="formationintegration:${env.BUILD_ID}"
-        CT_NAME="formationintegration-container"
+        IMG="formationintegration-guillaume:${env.BUILD_ID}"
+        CT_NAME="formationintegration-guillaume-container"
     }
 
     stages {
